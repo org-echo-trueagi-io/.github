@@ -1,4 +1,4 @@
-name: Clone Repos to Current Org
+name: Clone Repos to Current Org PAT
 
 on:
   workflow_dispatch:
