@@ -34,6 +34,14 @@ jobs:
             git clone "https://github.com/$SOURCE_ORG/$repo.git" "$repo"
             cd $repo
 
+            # Check if the repository exists in the target organization
+            if ! gh repo view "$TARGET_ORG/$repo" > /dev/null 2>&1; then
+              echo "Repository $repo does not exist in $TARGET_ORG. Creating..."
+              gh repo create "$TARGET_ORG/$repo" --private --confirm
+            else
+              echo "Repository $repo already exists in $TARGET_ORG."
+            fi
+
             git remote set-url origin "https://github.com/$TARGET_ORG/$repo.git"
             echo "Pushing $repo to $TARGET_ORG"
 
