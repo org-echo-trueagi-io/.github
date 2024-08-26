@@ -15,7 +15,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install gh git -y
 
-      - name: Authenticate with GitHub
+      - name: Authenticate with GitHub CLI
         run: echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
 
       - name: Configure Git to Use GitHub Token
@@ -43,10 +43,10 @@ jobs:
 
           gh repo list $SOURCE_ORG --json name -q '.[].name' | while read repo; do
             echo "Cloning $repo from $SOURCE_ORG"
-            git clone https://github.com/$SOURCE_ORG/$repo.git
+            git clone "https://github.com/$SOURCE_ORG/$repo.git" "$repo"
             cd $repo
             
-            git remote set-url origin https://github.com/$TARGET_ORG/$repo.git
+            git remote set-url origin "https://github.com/$TARGET_ORG/$repo.git"
             echo "Pushing $repo to $TARGET_ORG"
             
             git push --mirror
