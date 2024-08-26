@@ -1,4 +1,4 @@
-name: Clone Repos to Current Org PAT
+name: Clone Repos to Current Org
 
 on:
   workflow_dispatch:
@@ -15,6 +15,10 @@ jobs:
           sudo apt-get update
           sudo apt-get install gh git -y
 
+      - name: Authenticate with PAT
+        run: |
+          echo "${{ secrets.ORG_PAT }}" | gh auth login --with-token
+
       - name: Set Variables
         id: vars
         run: |
@@ -28,8 +32,6 @@ jobs:
         run: |
           mkdir -p cloned-repos
           cd cloned-repos
-
-          gh auth login --with-token < <(echo ${{ secrets.ORG_PAT }})
 
           gh repo list $SOURCE_ORG --json name -q '.[].name' | while read repo; do
             echo "Cloning $repo from $SOURCE_ORG"
